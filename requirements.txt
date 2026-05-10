@@ -1,0 +1,10 @@
+PySide6
+fastapi
+uvicorn[standard]
+sqlalchemy
+alembic
+websockets
+pydantic
+python-multipart
+psycopg[binary]
+httpx

@@ -1,0 +1,19 @@
+INFO:     Started server process [3708]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+INFO:     192.168.0.106:55077 - "WebSocket /ws/sync?token=tok_RuZSf3JiD6SJ9Cz6rRlBR0UWA46rVfByh56TZPN3ptU" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     192.168.0.106:61455 - "WebSocket /ws/sync?token=tok_RuZSf3JiD6SJ9Cz6rRlBR0UWA46rVfByh56TZPN3ptU" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     192.168.0.106:49861 - "WebSocket /ws/sync?token=tok_Ro1eWDNVF5l5Age7cD8cUYXmOvAPZixqhFcSXisL9Ts" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     192.168.0.106:53354 - "WebSocket /ws/sync?token=tok_nLnkFBf3qF29TXmMzpyj3VoO01GDpfWSjcILjhmNgK8" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     192.168.0.106:55096 - "WebSocket /ws/sync?token=tok_STY7r5OwT10ZW4AdGmN3HXweekbM4ejIdyR7Gc_G6qc" [accepted]
+INFO:     connection open
+INFO:     connection closed

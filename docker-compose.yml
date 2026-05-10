@@ -1,0 +1,78 @@
+name: banikos
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-banikos}
+      POSTGRES_USER: ${POSTGRES_USER:-banikos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banikos_dev_password_change_me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - banikos_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - banikos_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      POS_DATABASE_URL: postgresql://${POSTGRES_USER:-banikos}:${POSTGRES_PASSWORD:-banikos_dev_password_change_me}@postgres:5432/${POSTGRES_DB:-banikos}
+      POS_DATA_DIR: /app/data
+      POS_BACKUP_RETENTION_DAYS: "14"
+      POS_CORS_ORIGINS: ${POS_CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      REDIS_URL: redis://redis:6379/0
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
+    ports:
+      - "8000:8000"
+    volumes:
+      - banikos_backend_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=5).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_PUBLIC_SITE_ORIGIN: ${VITE_PUBLIC_SITE_ORIGIN:-https://banikos.local}
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  banikos_postgres_data:
+  banikos_redis_data:
+  banikos_backend_data:

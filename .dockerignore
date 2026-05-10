@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.env
+.env.local
+data/
+.vscode/.git/
+.vscode/test-data/
+.vscode/build-check/
+frontend/node_modules/
+frontend/dist/
+frontend/.svelte-kit/
+frontend/src-tauri/target/
+backend/uploads/
